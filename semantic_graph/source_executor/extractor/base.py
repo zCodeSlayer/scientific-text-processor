@@ -1,6 +1,6 @@
 from typing import Protocol
 
-from semantic_graph.models import Term
+from ..models import Term
 
 
 class IExtractor(Protocol):
