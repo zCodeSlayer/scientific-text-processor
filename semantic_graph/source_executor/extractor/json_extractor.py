@@ -1,11 +1,11 @@
 import json
 from pathlib import Path
 
-from .base import BaseExtractor
+from .base import IExtractor
 from ..models import Term
 
 
-class JSONExtractor(BaseExtractor):
+class JSONExtractor(IExtractor):
     def __init__(self, file_path: Path) -> None:
         self.file_path: Path = file_path
 

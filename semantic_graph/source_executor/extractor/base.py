@@ -3,5 +3,5 @@ from typing import Protocol
 from ..models import Term
 
 
-class BaseExtractor(Protocol):
+class IExtractor(Protocol):
     def extract(self) -> list[Term]: ...
