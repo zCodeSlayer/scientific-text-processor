@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 
 from .base import BaseExtractor
-from ..models import Term
+from semantic_graph.models import Term
 
 
 class JSONExtractor(BaseExtractor):
