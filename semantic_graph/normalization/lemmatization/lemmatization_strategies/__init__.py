@@ -1,1 +1,1 @@
-from .base import LemmatizationStrategy
+from .base import ILemmatizationStrategy
