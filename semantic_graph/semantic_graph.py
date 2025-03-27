@@ -1,0 +1,2 @@
+class SemanticGraph:
+    pass
