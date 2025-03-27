@@ -1,7 +1,7 @@
 from typing import Protocol
 
-from ..models import Term
+from ..models import TermModel
 
 
 class IExtractor(Protocol):
-    def extract(self) -> list[Term]: ...
+    def extract(self) -> list[TermModel]: ...
