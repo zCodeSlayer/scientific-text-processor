@@ -20,4 +20,8 @@ class Link:
 
 
 class SemanticGraph:
-    pass
+    def __init__(self) -> None:
+        self.__nodes: dict[int, Node] = {}
+
+    def add_node(self, node: Node) -> None:
+        self.__nodes[hash(node)] = node

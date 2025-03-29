@@ -1,5 +1,7 @@
+from typing import Iterable
+
 from .term import Term
-from .semantic_graph import SemanticGraph
+from .semantic_graph import SemanticGraph, Node
 
 
 class SemanticGraphGenerator:
@@ -11,7 +13,8 @@ class SemanticGraphGenerator:
         return self.__semantic_graph
 
     def create_semantic_graph(self, terms: list[Term]) -> SemanticGraph:
-        prepared_terms: list[terms] = self.__concatenate_terms(terms)
+        prepared_terms: list[Term] = self.__concatenate_terms(terms)
+        self.add_nodes(prepared_terms)
 
         return self.__semantic_graph
 
@@ -28,3 +31,11 @@ class SemanticGraphGenerator:
             terms_collection[term_hash].description_lemmas += term.description_lemmas
 
         return list(terms_collection.values())
+
+    def add_nodes(self, terms: Iterable[Term]) -> None:
+        for term in terms:
+            self.add_node(term)
+
+    def add_node(self, term: Term) -> None:
+        node: Node = Node(term=term)
+        self.__semantic_graph.add_node(node)
