@@ -22,6 +22,7 @@ class SemanticGraphGenerator:
     def create_semantic_graph(self, terms: list[Term]) -> SemanticGraph:
         prepared_terms: list[Term] = self.__concatenate_terms(terms)
         self.add_nodes(prepared_terms)
+        terms_usages: list[TermUsage] = self.investigate_terms_usages(prepared_terms)
 
         return self.__semantic_graph
 
@@ -47,7 +48,11 @@ class SemanticGraphGenerator:
         node: Node = Node(term=term)
         self.__semantic_graph.add_node(node)
 
-    def find_term_usage(self, term: Term, terms: Iterable[Term]) -> TermUsage:
+    def investigate_terms_usages(self, terms: Iterable[Term]) -> list[TermUsage]:
+        return [self.find_term_usage(term, terms) for term in terms]
+
+    @staticmethod
+    def find_term_usage(term: Term, terms: Iterable[Term]) -> TermUsage:
         term_usage: TermUsage = TermUsage(term)
         for investigated_term in terms:
             if investigated_term == term:
