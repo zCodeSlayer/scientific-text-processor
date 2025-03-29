@@ -1,7 +1,14 @@
 from typing import Iterable
+from dataclasses import dataclass, field
 
 from .term import Term
 from .semantic_graph import SemanticGraph, Node
+
+
+@dataclass
+class TermUsage:
+    term: Term
+    terms_used_this_term: list[Term] = field(default_factory=list)
 
 
 class SemanticGraphGenerator:
@@ -27,7 +34,7 @@ class SemanticGraphGenerator:
                 terms_collection[term_hash] = term
                 continue
 
-            terms_collection[term_hash].description += term.description
+            terms_collection[term_hash].description += f" {term.description}".strip()
             terms_collection[term_hash].description_lemmas += term.description_lemmas
 
         return list(terms_collection.values())
@@ -39,3 +46,23 @@ class SemanticGraphGenerator:
     def add_node(self, term: Term) -> None:
         node: Node = Node(term=term)
         self.__semantic_graph.add_node(node)
+
+    def find_term_usage(self, term: Term, terms: Iterable[Term]) -> TermUsage:
+        term_usage: TermUsage = TermUsage(term)
+        for investigated_term in terms:
+            if investigated_term == term:
+                continue
+
+            term_size: int = len(term.title_lemmas)
+            investigated_description_size: int = len(
+                investigated_term.description_lemmas
+            )
+            for text_position in range(investigated_description_size - term_size + 1):
+                description_slice: list[str] = investigated_term.description_lemmas[
+                    text_position : text_position + term_size
+                ]
+                if hash(term) == hash(frozenset(description_slice)):
+                    term_usage.terms_used_this_term.append(investigated_term)
+                    break
+
+        return term_usage
