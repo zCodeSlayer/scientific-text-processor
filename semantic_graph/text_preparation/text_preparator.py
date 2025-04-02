@@ -27,8 +27,9 @@ class TextPreparator:
         return lemmas
 
     def __filter_lemmas(self, lemmas: list[str], min_lemma_size: int) -> list[str]:
-        filtered_lemmas: list[str] = [
-            lemma for lemma in lemmas if len(lemma) >= min_lemma_size
+        filtered_lemmas: list[str] = [lemma.strip() for lemma in lemmas]
+        filtered_lemmas = [
+            lemma for lemma in filtered_lemmas if len(lemma) > min_lemma_size
         ]
 
         return filtered_lemmas
