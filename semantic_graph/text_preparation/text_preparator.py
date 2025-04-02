@@ -4,23 +4,19 @@ from .lemmatization.lemmatization_strategies import ILemmatizationStrategy
 
 
 class TextPreparator:
-    def __init__(
-        self, text: str, lemmatization_strategy: ILemmatizationStrategy
-    ) -> None:
-        self.__raw_text: str = text
+    def __init__(self, lemmatization_strategy: ILemmatizationStrategy) -> None:
         self.__lemmatization_strategy: ILemmatizationStrategy = lemmatization_strategy
 
-    def prepare_lemmas(self) -> list[str]:
-        normalized_text: str = self.__make_normalization()
+    def prepare_lemmas(self, text: str) -> list[str]:
+        normalized_text: str = self.__make_normalization(text)
         lemmas: list[str] = self.__make_lemmatization(normalized_text)
         min_lemma_size = 2
         filtered_lemmas: list[str] = self.__filter_lemmas(lemmas, min_lemma_size)
 
         return filtered_lemmas
 
-    def __make_normalization(self) -> str:
-        normalizer: Normalizer = Normalizer(self.__raw_text)
-        normalized_text: str = normalizer.normalize_text()
+    def __make_normalization(self, text: str) -> str:
+        normalized_text: str = Normalizer().normalize_text(text)
 
         return normalized_text
 
