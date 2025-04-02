@@ -1,8 +1,8 @@
 from typing import Iterable
 from dataclasses import dataclass, field
 
-from .term import Term
-from .semantic_graph import SemanticGraph, Node
+from term import Term
+from semantic_graph import SemanticGraph, Node
 
 
 @dataclass

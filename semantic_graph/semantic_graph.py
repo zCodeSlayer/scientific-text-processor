@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from .term import Term
+from term import Term
 
 
 @dataclass
