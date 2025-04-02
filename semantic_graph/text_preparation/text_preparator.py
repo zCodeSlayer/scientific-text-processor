@@ -25,8 +25,8 @@ class TextPreparator:
         return normalized_text
 
     def __make_lemmatization(self, text: str) -> list[str]:
-        lemmatizer: Lemmatizer = Lemmatizer(text, self.__lemmatization_strategy)
-        lemmas: list[str] = lemmatizer.make_lemmatization()
+        lemmatizer: Lemmatizer = Lemmatizer(self.__lemmatization_strategy)
+        lemmas: list[str] = lemmatizer.make_lemmatization(text)
 
         return lemmas
 
