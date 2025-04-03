@@ -1,5 +1,7 @@
 from typing import Iterable
 from dataclasses import dataclass, field
+from functools import partial
+from concurrent.futures import ProcessPoolExecutor
 
 from term import Term
 from semantic_graph import SemanticGraph, Node
@@ -49,7 +51,10 @@ class SemanticGraphGenerator:
         self.__semantic_graph.add_node(node)
 
     def investigate_terms_usages(self, terms: Iterable[Term]) -> list[TermUsage]:
-        return [self.find_term_usage(term, terms) for term in terms]
+        with ProcessPoolExecutor(max_workers=None) as executor:
+            find_term_usage_parallely = partial(self.find_term_usage, terms=terms)
+            terms_usages = list(executor.map(find_term_usage_parallely, terms))
+            return terms_usages
 
     @staticmethod
     def find_term_usage(term: Term, terms: Iterable[Term]) -> TermUsage:
