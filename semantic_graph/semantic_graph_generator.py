@@ -1,6 +1,6 @@
 from typing import Iterable
 from dataclasses import dataclass, field
-from functools import partial
+from functools import partial, cache
 from collections import namedtuple
 from concurrent.futures import ProcessPoolExecutor
 
@@ -63,27 +63,21 @@ class SemanticGraphGenerator:
     def investigate_terms_usages(self, terms: Iterable[Term]) -> list[TermUsage]:
         with ProcessPoolExecutor(max_workers=None) as executor:
             find_term_usage_parallely = partial(self.find_term_usage, terms=terms)
-            terms_usages = list(executor.map(find_term_usage_parallely, terms[:11]))
+            terms_usages = list(executor.map(find_term_usage_parallely, terms))
             return terms_usages
 
     @staticmethod
     def find_term_usage(term: Term, terms: Iterable[Term]) -> TermUsage:
         term_usage: TermUsage = TermUsage(term)
+        term_text: str = " ".join(term.title_lemmas).lower().strip()
         for investigated_term in terms:
             if investigated_term == term:
                 continue
 
-            term_size: int = len(term.title_lemmas)
-            investigated_description_size: int = len(
-                investigated_term.description_lemmas
+            investigated_description_text: str = (
+                " ".join(investigated_term.description_lemmas).lower().strip()
             )
-            term_used_count: int = 0
-            for text_position in range(investigated_description_size - term_size + 1):
-                description_slice: list[str] = investigated_term.description_lemmas[
-                    text_position : text_position + term_size
-                ]
-                if hash(term) == hash(frozenset(description_slice)):
-                    term_used_count += 1
+            term_used_count: int = investigated_description_text.count(term_text)
 
             if term_used_count > 0:
                 term_usage_count = TERM_USED_COUNT(investigated_term, term_used_count)
