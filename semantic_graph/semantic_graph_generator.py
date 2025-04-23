@@ -33,6 +33,9 @@ class SemanticGraphGenerator:
         prepared_terms: list[Term] = self.__concatenate_terms(terms)
         self.add_nodes(prepared_terms)
         terms_usages: list[TermUsage] = self.investigate_terms_usages(prepared_terms)
+        short_terms_descriptions: list[TermUsage] = self.reverse_terms_usages(
+            terms_usages
+        )
 
         return self.__semantic_graph
 
@@ -82,3 +85,16 @@ class SemanticGraphGenerator:
                 term_usage.terms_used_this_term.append(term_usage_count)
 
         return term_usage
+
+    @staticmethod
+    def reverse_terms_usages(terms_usages: list[TermUsage]) -> list[TermUsage]:
+        terms: dict[int, TermUsage] = {}
+        for term_usage in terms_usages:
+            for used_term in term_usage.terms_used_this_term:
+                if terms.get(hash(used_term.term)) is None:
+                    terms[hash(used_term.term)] = TermUsage(used_term.term)
+                terms[hash(used_term.term)].terms_used_this_term.append(
+                    TermUsedCount(term=term_usage.term, used_count=used_term.used_count)
+                )
+
+        return list(terms.values())
