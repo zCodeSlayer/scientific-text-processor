@@ -1,26 +1,24 @@
-from typing import Iterable
+from typing import Iterable, NamedTuple
 from dataclasses import dataclass, field
-from functools import partial, cache
-from collections import namedtuple
+from functools import partial
 from concurrent.futures import ProcessPoolExecutor
 
 from term import Term
 from semantic_graph import SemanticGraph, Node
 
 
-TERM_USED_COUNT = namedtuple(
-    "TERM_USED_COUNT",
-    [
-        "term",
-        "used_count",
-    ],
-)
+class TermUsedCount(NamedTuple):
+    term: Term
+    used_count: int
 
 
 @dataclass
 class TermUsage:
     term: Term
-    terms_used_this_term: list[TERM_USED_COUNT] = field(default_factory=list)
+    terms_used_this_term: list[TermUsedCount] = field(default_factory=list)
+
+    def __hash__(self) -> int:
+        return hash(self.term)
 
 
 class SemanticGraphGenerator:
@@ -80,7 +78,7 @@ class SemanticGraphGenerator:
             term_used_count: int = investigated_description_text.count(term_text)
 
             if term_used_count > 0:
-                term_usage_count = TERM_USED_COUNT(investigated_term, term_used_count)
+                term_usage_count = TermUsedCount(investigated_term, term_used_count)
                 term_usage.terms_used_this_term.append(term_usage_count)
 
         return term_usage
