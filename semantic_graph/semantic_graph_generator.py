@@ -1,3 +1,5 @@
+import math
+
 from typing import Iterable, NamedTuple
 from dataclasses import dataclass, field
 from functools import partial
@@ -31,11 +33,12 @@ class SemanticGraphGenerator:
 
     def create_semantic_graph(self, terms: list[Term]) -> SemanticGraph:
         prepared_terms: list[Term] = self.__concatenate_terms(terms)
-        self.add_nodes(prepared_terms)
         terms_usages: list[TermUsage] = self.investigate_terms_usages(prepared_terms)
         short_terms_descriptions: list[TermUsage] = self.reverse_terms_usages(
             terms_usages
         )
+        self.add_nodes(prepared_terms)
+        self.create_links(short_terms_descriptions)
 
         return self.__semantic_graph
 
@@ -98,3 +101,44 @@ class SemanticGraphGenerator:
                 )
 
         return list(terms.values())
+
+    def create_links(self, terms: list[TermUsage]) -> None:
+        all_term_idf: dict[int, float] = self.calc_all_idf(terms)
+        for term in terms:
+            for used_term in term.terms_used_this_term:
+                if used_term == term:  # not create click link in graph
+                    continue
+
+                tf: float = used_term.used_count / sum(
+                    used.used_count for used in term.terms_used_this_term
+                )
+                idf: float = all_term_idf[hash(used_term)]
+                tf_idf: float = tf * idf
+
+                node_1: Node | None = self.__semantic_graph.get_node_by_hash(
+                    hash(used_term)
+                )
+                node_2: Node | None = self.__semantic_graph.get_node_by_hash(hash(term))
+                if node_1 is None or node_2 is None:
+                    raise Exception("Not found node for create link in semantic graph")
+
+                self.__semantic_graph.add_link(node_1, node_2, tf_idf)
+
+    @staticmethod
+    def calc_all_idf(terms: list[TermUsage]) -> dict[int, float]:
+        all_terms_idf: dict[int, float] = {}
+        for term in terms:
+            term_usage_count: int = 0
+            for term_ in terms:
+                for usage in term_.terms_used_this_term:
+                    if usage.term == term:
+                        term_usage_count += 1
+                        break
+
+            if term_usage_count == 0:
+                term_usage_count = 1
+
+            idf = math.log10(len(terms) / term_usage_count)
+            all_terms_idf[hash(term)] = idf
+
+        return all_terms_idf

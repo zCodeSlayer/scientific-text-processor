@@ -26,6 +26,9 @@ class SemanticGraph:
     def add_node(self, node: Node) -> None:
         self.__nodes[hash(node)] = node
 
+    def get_node_by_hash(self, node_hash: int) -> Node | None:
+        return self.__nodes.get(node_hash)
+
     def add_link(self, node: Node, next_node: Node, weight: float) -> None:
         ex_message: str = "Node with term {node} not included in graph"
         if self.__nodes.get(hash(node)) is None:
