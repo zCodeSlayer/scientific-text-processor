@@ -117,7 +117,7 @@ class SemanticGraphGenerator:
                 tf_idf: float = tf * idf
 
                 node_1: Node | None = self.__semantic_graph.get_node_by_hash(
-                    hash(used_term_hash)
+                    used_term_hash
                 )
                 node_2: Node | None = self.__semantic_graph.get_node_by_hash(hash(term))
                 if node_1 is None or node_2 is None:
