@@ -112,11 +112,12 @@ class SemanticGraphGenerator:
                 tf: float = used_term.used_count / sum(
                     used.used_count for used in term.terms_used_this_term
                 )
-                idf: float = all_term_idf[hash(used_term)]
+                used_term_hash: int = hash(used_term.term)
+                idf: float = all_term_idf[used_term_hash]
                 tf_idf: float = tf * idf
 
                 node_1: Node | None = self.__semantic_graph.get_node_by_hash(
-                    hash(used_term)
+                    hash(used_term_hash)
                 )
                 node_2: Node | None = self.__semantic_graph.get_node_by_hash(hash(term))
                 if node_1 is None or node_2 is None:
