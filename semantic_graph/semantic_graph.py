@@ -7,7 +7,6 @@ from term import Term
 class Node:
     term: Term
     links: list["Link"] = field(default_factory=list)
-    weight: float = 0.0
 
     def __hash__(self) -> int:
         return hash(self.term)
