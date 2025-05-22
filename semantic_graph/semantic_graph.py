@@ -22,6 +22,10 @@ class SemanticGraph:
     def __init__(self) -> None:
         self.__nodes: dict[int, Node] = {}
 
+    @property
+    def nodes(self) -> list[Node]:
+        return list(self.__nodes.values())
+
     def add_node(self, node: Node) -> None:
         self.__nodes[hash(node)] = node
 
