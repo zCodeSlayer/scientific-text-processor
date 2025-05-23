@@ -41,9 +41,30 @@ document.getElementById('search-button').addEventListener('click', () => {
   }
 });
 
-const widgetToggleButton = document.getElementById('widget-toggle-button');
+// Collapsible widget functionality
+const collapsibleWidget = document.getElementById('collapsible-widget');
 const widgetList = document.getElementById('widget-list');
 
-widgetToggleButton.addEventListener('click', () => {
+collapsibleWidget.addEventListener('click', () => {
   widgetList.classList.toggle('hidden');
-}); 
+  if (!widgetList.classList.contains('hidden')) {
+    // Fetch data and update list when widget is opened
+    fetch('http://0.0.0.0:8000/scientific-catalogs/titles')
+      .then(response => response.json())
+      .then(data => {
+        updateWidgetList(data.catalogsTitles);
+      })
+      .catch(error => console.error('Error fetching catalog titles:', error));
+  }
+});
+
+function updateWidgetList(titles) {
+  // Clear existing list items
+  widgetList.innerHTML = '';
+  // Add new list items
+  titles.forEach(title => {
+    const listItem = document.createElement('li');
+    listItem.textContent = title;
+    widgetList.appendChild(listItem);
+  });
+} 

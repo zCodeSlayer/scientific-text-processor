@@ -5,6 +5,7 @@ from pathlib import Path
 
 from typing import Annotated
 from fastapi import FastAPI, Depends, UploadFile, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -36,6 +37,8 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+
+app.add_middleware(CORSMiddleware, allow_origins=["*"])
 
 
 @app.get("/scientific-catalog-graph/{catalog_name}")
