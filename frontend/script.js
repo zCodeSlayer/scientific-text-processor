@@ -39,4 +39,11 @@ document.getElementById('search-button').addEventListener('click', () => {
   } else {
     alert('Node not found!');
   }
+});
+
+const widgetToggleButton = document.getElementById('widget-toggle-button');
+const widgetList = document.getElementById('widget-list');
+
+widgetToggleButton.addEventListener('click', () => {
+  widgetList.classList.toggle('hidden');
 }); 

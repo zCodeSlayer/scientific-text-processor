@@ -20,4 +20,57 @@ body {
 #node-search-input {
   padding: 5px;
   margin-right: 5px;
+}
+
+#collapsible-widget {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1000; /* Чтобы было поверх графа */
+}
+
+#widget-toggle-button {
+  width: 40px;
+  height: 40px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#widget-toggle-button:hover {
+  background-color: #2980b9;
+}
+
+#widget-list {
+  list-style: none;
+  padding: 0;
+  margin: 5px 0 0 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 150px; /* Или другая ширина по необходимости */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+#widget-list.hidden {
+  display: none;
+}
+
+#widget-list li {
+  padding: 8px 12px;
+  border-bottom: 1px solid #eee;
+}
+
+#widget-list li:last-child {
+  border-bottom: none;
+}
+
+#widget-list li:hover {
+  background-color: #f0f0f0;
 } 
