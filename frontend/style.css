@@ -1,9 +1,23 @@
 body {
   background: lightgrey;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 }
 
 #container {
-  width: 800px;
-  height: 600px;
+  width: 100vw;
+  height: 100vh;
   background: white;
+}
+
+#search-container {
+  padding: 10px;
+  background: #f0f0f0;
+  text-align: center;
+}
+
+#node-search-input {
+  padding: 5px;
+  margin-right: 5px;
 } 

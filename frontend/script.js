@@ -2,7 +2,41 @@
 const graph = new graphology.Graph();
 graph.addNode("1", { label: "Node 1", x: 0, y: 0, size: 10, color: "blue" });
 graph.addNode("2", { label: "Node 2", x: 1, y: 1, size: 20, color: "red" });
-graph.addEdge("1", "2", { size: 5, color: "purple" });
+graph.addEdge("1", "2", { size: 5, color: "purple", label: "Edge from 1 to 2" });
 
 // Instantiate sigma.js and render the graph
-const sigmaInstance = new Sigma(graph, document.getElementById("container")); 
+const sigmaInstance = new Sigma(graph, document.getElementById("container"), {
+  renderEdgeLabels: true
+});
+
+document.getElementById('search-button').addEventListener('click', () => {
+  const searchTerm = document.getElementById('node-search-input').value.toLowerCase();
+  if (!searchTerm) return;
+
+  let foundNode = null;
+  // Ищем по ID, затем по label
+  if (graph.hasNode(searchTerm)) {
+      foundNode = graph.getNodeAttributes(searchTerm);
+      // Важно: для goTo нужны исходные x, y, а не те, что sigma трансформирует для отображения.
+      // Если sigmaInstance.getGraph() возвращает тот же объект graphology, то x, y должны быть доступны.
+  } else {
+      graph.forEachNode((node, attributes) => {
+          if (attributes.label && attributes.label.toLowerCase() === searchTerm) {
+              foundNode = attributes; 
+              // Здесь мы также предполагаем, что attributes содержит x и y
+          }
+      });
+  }
+
+  if (foundNode && typeof foundNode.x === 'number' && typeof foundNode.y === 'number') {
+    sigmaInstance.getCamera().animate(
+      { x: foundNode.x, y: foundNode.y, ratio: 0.5 }, // ratio: 0.5 для приближения
+      { duration: 500 } 
+    );
+    // Можно добавить логику для выделения вершины, например, изменив её цвет
+    // graph.setNodeAttribute(foundNode.key || searchTerm, 'color', 'green'); // searchTerm если искали по ID, foundNode.key если он есть
+    // sigmaInstance.refresh(); // Не забыть обновить, если меняем атрибуты
+  } else {
+    alert('Node not found!');
+  }
+}); 
