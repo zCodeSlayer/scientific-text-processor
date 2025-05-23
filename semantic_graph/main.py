@@ -124,6 +124,22 @@ async def insert_graph_into_db(session: AsyncSession, semantic_graph: SemanticGr
     await session.commit()
 
 
+@app.get("/scientific-catalogs/titles", response_model=dict[str, list[str]])
+async def get_all_scientific_catalog_titles(session: DBSessionDepends):
+    """
+    Возвращает список всех названий (title) из таблицы ScientificCatalogModel.
+    """
+
+    stmt = select(ScientificCatalogModel.title)
+    result = await session.execute(stmt)
+    titles: list[str] = result.scalars().all()
+
+    response = {
+        "catalogsTitles": titles
+    }
+    
+    return response
+
 
 def main() -> None:
     file_path: Path = Path(
