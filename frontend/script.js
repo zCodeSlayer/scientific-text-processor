@@ -69,7 +69,37 @@ function updateWidgetList(titles) {
       fetch(`http://0.0.0.0:8000/scientific-catalog-graph/${title}`)
         .then(response => response.json())
         .then(data => {
-          console.log(data);
+          // Очищаем предыдущий граф
+          graph.clear();
+          // Добавляем новые узлы и ребра
+          data.forEach(link => {
+            if (!graph.hasNode(link.term_from.hash.toString())) {
+              graph.addNode(link.term_from.hash.toString(), { 
+                label: link.term_from.title,
+                // Для простоты разместим узлы случайным образом
+                x: Math.random(), 
+                y: Math.random(), 
+                size: 10, 
+                color: "blue" 
+              });
+            }
+            if (!graph.hasNode(link.term_to.hash.toString())) {
+              graph.addNode(link.term_to.hash.toString(), { 
+                label: link.term_to.title,
+                x: Math.random(), 
+                y: Math.random(), 
+                size: 10, 
+                color: "red" 
+              });
+            }
+            graph.addEdge(link.term_from.hash.toString(), link.term_to.hash.toString(), {
+              type: 'arrow',
+              size: link.weight, // Используем вес связи для размера ребра
+              color: "purple",
+              label: `Weight: ${link.weight.toFixed(2)}`
+            });
+          });
+          sigmaInstance.refresh(); // Обновляем отображение графа
         })
         .catch(error => console.error('Error fetching catalog entry:', error));
     });
