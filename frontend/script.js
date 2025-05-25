@@ -65,6 +65,14 @@ function updateWidgetList(titles) {
   titles.forEach(title => {
     const listItem = document.createElement('li');
     listItem.textContent = title;
+    listItem.addEventListener('click', () => {
+      fetch(`http://0.0.0.0:8000/scientific-catalog-graph/${title}`)
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+        })
+        .catch(error => console.error('Error fetching catalog entry:', error));
+    });
     widgetList.appendChild(listItem);
   });
 } 
