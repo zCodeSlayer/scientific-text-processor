@@ -73,4 +73,58 @@ body {
 
 #widget-list li:hover {
   background-color: #f0f0f0;
+}
+
+/* Стили для нового сворачиваемого блока ввода */
+.collapsible-container {
+  position: absolute;
+  top: 10px; /* Такой же отступ сверху, как у первого виджета */
+  left: 60px; /* 10px (отступ слева первого виджета) + 40px (ширина кнопки первого виджета) + 10px (промежуток) */
+  z-index: 1000;
+}
+
+.toggle-button {
+  width: 40px;
+  height: 40px;
+  background-color: #2ecc71; /* Другой цвет для отличия */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle-button:hover {
+  background-color: #27ae60;
+}
+
+.collapsible-content {
+  padding: 10px;
+  margin: 5px 0 0 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 200px; /* Или другая ширина по необходимости */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.collapsible-content.hidden {
+  display: none;
+}
+
+.collapsible-content input[type="text"],
+.collapsible-content input[type="file"] {
+  width: calc(100% - 22px); /* Учитываем padding контейнера и border поля */
+  margin-bottom: 10px;
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+}
+
+.collapsible-content label {
+  display: block;
+  margin-bottom: 5px;
 } 

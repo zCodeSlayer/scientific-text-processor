@@ -19,6 +19,15 @@
       </ul>
     </div>
 
+    <div id="input-widget" class="collapsible-container">
+      <button id="toggle-form-button" class="toggle-button">+</button> <!-- Можно использовать другой символ или иконку -->
+      <div id="input-form" class="collapsible-content hidden">
+        <input type="text" id="text-input" name="text-input" placeholder="Введите название">
+        <input type="file" id="file-input" name="file-input">
+        <button id="generate-graph-button" style="margin-top: 10px;">Сгенерировать семантический граф</button>
+      </div>
+    </div>
+
     <div id="container"></div>
     <script src="script.js"></script>
   </body>

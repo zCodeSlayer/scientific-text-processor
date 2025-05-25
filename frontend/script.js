@@ -105,4 +105,57 @@ function updateWidgetList(titles) {
     });
     widgetList.appendChild(listItem);
   });
-} 
+}
+
+// Input form functionality
+const toggleFormButton = document.getElementById('toggle-form-button');
+const inputForm = document.getElementById('input-form');
+
+toggleFormButton.addEventListener('click', () => {
+  inputForm.classList.toggle('hidden');
+}); 
+
+const generateGraphButton = document.getElementById('generate-graph-button');
+const textInput = document.getElementById('text-input');
+const fileInput = document.getElementById('file-input');
+
+generateGraphButton.addEventListener('click', async () => {
+  const textValue = textInput.value.trim();
+  const file = fileInput.files[0]; // Получаем сам файл, а не только его имя
+
+  if (!textValue || !file) { // Проверяем наличие файла, а не fileInput.value
+    alert('Введите информацию о семантическом графе полностью');
+    return; 
+  }
+
+  const formData = new FormData();
+  formData.append('file', file);
+
+  try {
+    const response = await fetch(`http://0.0.0.0:8000/generate-graph/${encodeURIComponent(textValue)}`, {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      alert('Граф успешно сгенерирован!');
+      console.log('Ответ сервера:', result);
+      // Тут можно добавить логику для обновления списка каталогов или отображения нового графа
+      // Например, можно снова вызвать fetch для /scientific-catalogs/titles и обновить widgetList
+      fetch('http://0.0.0.0:8000/scientific-catalogs/titles')
+        .then(res => res.json())
+        .then(data => {
+          updateWidgetList(data.catalogsTitles);
+        })
+        .catch(error => console.error('Error fetching catalog titles after generation:', error));
+    } else {
+      const errorData = await response.json();
+      alert(`Ошибка при генерации графа: ${errorData.detail || response.statusText}`);
+      console.error('Ошибка от сервера:', errorData);
+    }
+  } catch (error) {
+    alert('Произошла ошибка при отправке запроса.');
+    console.error('Сетевая ошибка или ошибка выполнения запроса:', error);
+  }
+}); 
