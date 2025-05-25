@@ -3,30 +3,33 @@
   <head>
     <meta charset="UTF-8" />
     <title>Quick Sigma.js Example</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sigma.js/2.4.0/sigma.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/graphology/0.25.4/graphology.umd.min.js"></script>
   </head>
   <body>
-    <div id="search-container">
-      <input type="text" id="node-search-input" placeholder="Enter node ID or label">
-      <button id="search-button">Find Node</button>
-    </div>
+    <header>
+        <div id="search-container">
+            <input type="text" id="node-search-input" placeholder="Enter node ID or label">
+            <button id="search-button">Find Node</button>
+        </div>
 
-    <div id="collapsible-widget">
-      <button id="widget-toggle-button">☰</button> <!-- Или другой значок -->
-      <ul id="widget-list" class="hidden">
-      </ul>
-    </div>
+        <div id="collapsible-widget">
+            <button id="widget-toggle-button" class="widget-control-button">☰</button>
+            <ul id="widget-list" class="hidden">
+            </ul>
+        </div>
 
-    <div id="input-widget" class="collapsible-container">
-      <button id="toggle-form-button" class="toggle-button">+</button> <!-- Можно использовать другой символ или иконку -->
-      <div id="input-form" class="collapsible-content hidden">
-        <input type="text" id="text-input" name="text-input" placeholder="Введите название">
-        <input type="file" id="file-input" name="file-input">
-        <button id="generate-graph-button" style="margin-top: 10px;">Сгенерировать семантический граф</button>
-      </div>
-    </div>
+        <div id="input-widget" class="collapsible-container">
+            <button id="toggle-form-button" class="toggle-button widget-control-button">+</button>
+            <div id="input-form" class="collapsible-content hidden">
+                <input type="text" id="text-input" name="text-input" placeholder="Введите название">
+                <input type="file" id="file-input" name="file-input">
+                <button id="generate-graph-button" style="margin-top: 10px;">Сгенерировать семантический граф</button>
+            </div>
+        </div>
+    </header>
 
     <div id="container"></div>
     <script src="script.js"></script>
