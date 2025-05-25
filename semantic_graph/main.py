@@ -16,6 +16,7 @@ from text_preparation.lemmatization.lemmatization_strategies import (
     MyStemLemmatizationStrategy,
 )
 from term import Term
+from schemas import Term as TermSchema, GraphLink as GraphLinkSchema
 from semantic_graph_generator import SemanticGraph, SemanticGraphGenerator
 from database import db_engine, get_session
 from models import (
@@ -42,7 +43,7 @@ app.add_middleware(CORSMiddleware, allow_origins=["*"])
 
 
 @app.get("/scientific-catalog-graph/{catalog_name}")
-async def get_scientific_catalog(catalog_name: str, session: DBSessionDepends):
+async def get_scientific_catalog(catalog_name: str, session: DBSessionDepends) -> list[GraphLinkSchema]:
     stmt = select(ScientificCatalogModel).where(ScientificCatalogModel.title == catalog_name)
     result = await session.execute(stmt)
     catalog_entry: ScientificCatalogModel = result.unique().scalars().one_or_none()
@@ -51,11 +52,12 @@ async def get_scientific_catalog(catalog_name: str, session: DBSessionDepends):
         raise HTTPException(status_code=404, detail=f"Scientific catalog with title '{catalog_name}' not found")
 
     response = [
-        {
-            "from": graph_link.term_from.title,
-            "to": graph_link.term_to.title,
-            "weight": graph_link.weight,
-        } for graph_link in catalog_entry.graph_links
+        GraphLinkSchema(**dict(
+            term_from=dict(title=graph_link.term_from.title, hash=graph_link.term_from.term_hash),
+            term_to=dict(title=graph_link.term_to.title, hash=graph_link.term_to.term_hash),
+            weight=graph_link.weight,
+        ))
+        for graph_link in catalog_entry.graph_links
     ]
     return response
 
