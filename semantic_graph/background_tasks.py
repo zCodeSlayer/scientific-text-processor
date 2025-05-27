@@ -9,6 +9,7 @@ from term import Term
 from semantic_graph_generator import SemanticGraph, SemanticGraphGenerator
 from models import (
     ScientificCatalogModel,
+    ScientificCatalogProcessingStatus,
     TermModel as TermDBModel,
     SemanticGraphLink,
 )
@@ -34,6 +35,9 @@ async def generate_graph_task(raw_terms: list[TermModel], catalog_id: int, sessi
         terms
     )
     await insert_graph_into_database(session, semantic_graph, catalog_id)
+    catalog: ScientificCatalogModel = await session.get(ScientificCatalogModel, catalog_id)
+    catalog.status = ScientificCatalogProcessingStatus.DONE
+    await session.commit()
 
 async def insert_graph_into_database(
         session: AsyncSession, semantic_graph: SemanticGraph, catalog_id: int
