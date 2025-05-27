@@ -8,9 +8,13 @@ body {
 }
 
 #container {
-  width: 100vw;
-  height: 100vh;
+  width: 80%;
+  height: calc(100vh - 70px);
   background: white;
+  margin: 20px auto 0 auto;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
 }
 
 #search-container {
@@ -77,9 +81,10 @@ body {
   border-radius: 5px;
   width: 150px; /* Или другая ширина по необходимости */
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  /* Добавляем для анимации */
-  overflow: hidden;
-  max-height: 200px; /* Предполагаемая максимальная высота. Отрегулируйте, если нужно больше. */
+  /* Изменяем для анимации и прокрутки */
+  overflow-y: auto; /* Добавляем вертикальную прокрутку при необходимости */
+  overflow-x: hidden; /* Предотвращаем горизонтальную прокрутку */
+  max-height: 200px; /* Возвращаем исходную максимальную высоту */
   opacity: 1;
   transition: max-height 0.35s ease-in-out, 
               opacity 0.35s ease-in-out, 
