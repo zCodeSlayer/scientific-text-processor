@@ -96,7 +96,7 @@ function updateWidgetList(titles) {
               type: 'arrow',
               size: link.weight, // Используем вес связи для размера ребра
               color: "purple",
-              label: `Weight: ${link.weight.toFixed(2)}`
+              label: `${link.weight}`
             });
           });
           sigmaInstance.refresh(); // Обновляем отображение графа
