@@ -81,7 +81,10 @@ async def get_all_scientific_catalog_titles(session: DBSessionDepends):
     Возвращает список всех названий (title) из таблицы ScientificCatalogModel.
     """
 
-    stmt = select(ScientificCatalogModel.title)
+    stmt = (
+        select(ScientificCatalogModel.title).
+        where(ScientificCatalogModel.status == ScientificCatalogProcessingStatus.DONE)
+    )
     result = await session.execute(stmt)
     titles: list[str] = result.scalars().all()
 
