@@ -13,32 +13,24 @@ document.getElementById('search-button').addEventListener('click', () => {
   const searchTerm = document.getElementById('node-search-input').value.toLowerCase();
   if (!searchTerm) return;
 
-  let foundNode = null;
-  // Ищем по ID, затем по label
-  if (graph.hasNode(searchTerm)) {
-      foundNode = graph.getNodeAttributes(searchTerm);
-      // Важно: для goTo нужны исходные x, y, а не те, что sigma трансформирует для отображения.
-      // Если sigmaInstance.getGraph() возвращает тот же объект graphology, то x, y должны быть доступны.
-  } else {
-      graph.forEachNode((node, attributes) => {
-          if (attributes.label && attributes.label.toLowerCase() === searchTerm) {
-              foundNode = attributes; 
-              // Здесь мы также предполагаем, что attributes содержит x и y
-          }
-      });
+  let foundNode = graph.findNode((node, attributes) => {
+      return attributes.label && attributes.label.toLowerCase() === searchTerm;
+    });
+  if (!foundNode) {
+    alert('Node not found!');
+    return;
   }
 
-  if (foundNode && typeof foundNode.x === 'number' && typeof foundNode.y === 'number') {
-    sigmaInstance.getCamera().animate(
-      { x: foundNode.x, y: foundNode.y, ratio: 0.5 }, // ratio: 0.5 для приближения
-      { duration: 500 } 
-    );
-    // Можно добавить логику для выделения вершины, например, изменив её цвет
-    // graph.setNodeAttribute(foundNode.key || searchTerm, 'color', 'green'); // searchTerm если искали по ID, foundNode.key если он есть
-    // sigmaInstance.refresh(); // Не забыть обновить, если меняем атрибуты
-  } else {
-    alert('Node not found!');
-  }
+  let neighbors = graph.neighbors(foundNode);
+  let edges = graph.edges(foundNode);
+
+  let subGraph = new graphology.Graph();
+  subGraph.addNode(foundNode, { ...graph.getNodeAttributes(foundNode) });
+  neighbors.forEach(neighbor => subGraph.addNode(neighbor, { ...graph.getNodeAttributes(neighbor) }));
+  edges.forEach(edge => subGraph.addEdge(graph.source(edge), graph.target(edge), { ...graph.getEdgeAttributes(edge) }));
+
+  sigmaInstance.setGraph(subGraph);
+  sigmaInstance.refresh();
 });
 
 // Collapsible widget functionality
@@ -69,6 +61,7 @@ function updateWidgetList(titles) {
       fetch(`http://0.0.0.0:8000/scientific-catalog-graph/${title}`)
         .then(response => response.json())
         .then(data => {
+          sigmaInstance.setGraph(graph);
           // Очищаем предыдущий граф
           graph.clear();
           // Добавляем новые узлы и ребра
