@@ -1,0 +1,215 @@
+body {
+  background: lightgrey;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: 'Open Sans', sans-serif;
+  background: white;
+}
+
+#container {
+  width: 80%;
+  height: calc(100vh - 70px);
+  background: white;
+  margin: 20px auto 0 auto;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+#search-container {
+  padding: 10px;
+  background: #f0f0f0;
+  text-align: center;
+  font-family: 'Open Sans', sans-serif;
+}
+
+#node-search-input {
+  padding: 5px;
+  margin-right: 5px;
+  font-family: 'Open Sans', sans-serif;
+}
+
+#collapsible-widget {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+}
+
+/* Общий стиль для кнопок управления виджетами */
+.widget-control-button {
+  width: 40px;
+  height: 40px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.widget-control-button:hover {
+  opacity: 0.9; /* Легкое изменение прозрачности при наведении */
+}
+
+#widget-toggle-button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#widget-toggle-button:hover {
+  background-color: #2980b9;
+}
+
+#widget-list {
+  list-style: none;
+  padding: 0;
+  margin: 5px 0 0 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 150px; /* Или другая ширина по необходимости */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  /* Изменяем для анимации и прокрутки */
+  overflow-y: auto; /* Добавляем вертикальную прокрутку при необходимости */
+  overflow-x: hidden; /* Предотвращаем горизонтальную прокрутку */
+  max-height: 200px; /* Возвращаем исходную максимальную высоту */
+  opacity: 1;
+  transition: max-height 0.35s ease-in-out, 
+              opacity 0.35s ease-in-out, 
+              margin-top 0.35s ease-in-out;
+}
+
+#widget-list.hidden {
+  /* display: none; - Заменяем это */
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0; /* Убираем верхний отступ при сворачивании */
+  /* Границы и тень будут обрезаны из-за max-height: 0 и overflow: hidden */
+  pointer-events: none; /* Чтобы нельзя было взаимодействовать со скрытым контентом */
+}
+
+#widget-list li {
+  padding: 8px 12px;
+  border-bottom: 1px solid #eee;
+}
+
+#widget-list li:last-child {
+  border-bottom: none;
+}
+
+#widget-list li:hover {
+  background-color: #f0f0f0;
+}
+
+/* Стили для нового сворачиваемого блока ввода */
+.collapsible-container {
+  position: absolute;
+  top: 10px;
+  left: 60px;
+  z-index: 1000;
+}
+
+.toggle-button {
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle-button:hover {
+  background-color: #27ae60;
+}
+
+.collapsible-content {
+  padding: 10px;
+  margin: 5px 0 0 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 200px; /* Или другая ширина по необходимости */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  /* Добавляем для анимации */
+  overflow: hidden;
+  max-height: 200px; /* Предполагаемая максимальная высота. Отрегулируйте. */
+  opacity: 1;
+  transition: max-height 0.35s ease-in-out, 
+              opacity 0.35s ease-in-out, 
+              margin-top 0.35s ease-in-out;
+}
+
+.collapsible-content.hidden {
+  /* display: none; - Заменяем это */
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0; /* Убираем верхний отступ при сворачивании */
+  padding-top: 0; /* Убираем внутренний отступ сверху при сворачивании */
+  padding-bottom: 0; /* Убираем внутренний отступ снизу при сворачивании */
+  border-top-width: 0; /* Скрываем верхнюю границу */
+  border-bottom-width: 0; /* Скрываем нижнюю границу */
+  pointer-events: none; /* Чтобы нельзя было взаимодействовать со скрытым контентом */
+}
+
+.collapsible-content input[type="text"],
+.collapsible-content input[type="file"] {
+  width: calc(100% - 22px); /* Учитываем padding контейнера и border поля */
+  margin-bottom: 10px;
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.collapsible-content label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* Стилизуем кнопку поиска */
+#search-button {
+  padding: 8px 15px;
+  background-color: #5dade2;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-family: 'Open Sans', sans-serif;
+}
+
+#search-button:hover {
+  background-color: #4b8fba;
+}
+
+/* Стилизуем кнопку генерации графа */
+#generate-graph-button {
+ margin-top: 10px;
+ padding: 8px 15px;
+ background-color: #58D68D;
+ color: white;
+ border: none;
+ border-radius: 5px;
+ cursor: pointer;
+ transition: background-color 0.3s ease;
+ font-family: 'Open Sans', sans-serif;
+}
+
+#generate-graph-button:hover {
+ background-color: #4CAF50;
+} 
