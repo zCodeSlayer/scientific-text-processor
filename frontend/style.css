@@ -37,7 +37,6 @@ body {
   z-index: 1000;
 }
 
-/* Общий стиль для кнопок управления виджетами */
 .widget-control-button {
   width: 40px;
   height: 40px;
@@ -53,7 +52,7 @@ body {
 }
 
 .widget-control-button:hover {
-  opacity: 0.9; /* Легкое изменение прозрачности при наведении */
+  opacity: 0.9;
 }
 
 #widget-toggle-button {
@@ -79,12 +78,11 @@ body {
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 5px;
-  width: 150px; /* Или другая ширина по необходимости */
+  width: 150px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  /* Изменяем для анимации и прокрутки */
-  overflow-y: auto; /* Добавляем вертикальную прокрутку при необходимости */
-  overflow-x: hidden; /* Предотвращаем горизонтальную прокрутку */
-  max-height: 200px; /* Возвращаем исходную максимальную высоту */
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 200px;
   opacity: 1;
   transition: max-height 0.35s ease-in-out, 
               opacity 0.35s ease-in-out, 
@@ -92,12 +90,10 @@ body {
 }
 
 #widget-list.hidden {
-  /* display: none; - Заменяем это */
   max-height: 0;
   opacity: 0;
-  margin-top: 0; /* Убираем верхний отступ при сворачивании */
-  /* Границы и тень будут обрезаны из-за max-height: 0 и overflow: hidden */
-  pointer-events: none; /* Чтобы нельзя было взаимодействовать со скрытым контентом */
+  margin-top: 0;
+  pointer-events: none;
 }
 
 #widget-list li {
@@ -113,7 +109,6 @@ body {
   background-color: #f0f0f0;
 }
 
-/* Стили для нового сворачиваемого блока ввода */
 .collapsible-container {
   position: absolute;
   top: 10px;
@@ -143,11 +138,10 @@ body {
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 5px;
-  width: 200px; /* Или другая ширина по необходимости */
+  width: 200px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  /* Добавляем для анимации */
   overflow: hidden;
-  max-height: 200px; /* Предполагаемая максимальная высота. Отрегулируйте. */
+  max-height: 200px;
   opacity: 1;
   transition: max-height 0.35s ease-in-out, 
               opacity 0.35s ease-in-out, 
@@ -155,20 +149,19 @@ body {
 }
 
 .collapsible-content.hidden {
-  /* display: none; - Заменяем это */
   max-height: 0;
   opacity: 0;
-  margin-top: 0; /* Убираем верхний отступ при сворачивании */
-  padding-top: 0; /* Убираем внутренний отступ сверху при сворачивании */
-  padding-bottom: 0; /* Убираем внутренний отступ снизу при сворачивании */
-  border-top-width: 0; /* Скрываем верхнюю границу */
-  border-bottom-width: 0; /* Скрываем нижнюю границу */
-  pointer-events: none; /* Чтобы нельзя было взаимодействовать со скрытым контентом */
+  margin-top: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-top-width: 0;
+  border-bottom-width: 0;
+  pointer-events: none;
 }
 
 .collapsible-content input[type="text"],
 .collapsible-content input[type="file"] {
-  width: calc(100% - 22px); /* Учитываем padding контейнера и border поля */
+  width: calc(100% - 22px);
   margin-bottom: 10px;
   padding: 5px;
   border: 1px solid #ddd;
@@ -181,7 +174,6 @@ body {
   margin-bottom: 5px;
 }
 
-/* Стилизуем кнопку поиска */
 #search-button {
   padding: 8px 15px;
   background-color: #5dade2;
@@ -197,7 +189,6 @@ body {
   background-color: #4b8fba;
 }
 
-/* Стилизуем кнопку генерации графа */
 #generate-graph-button {
  margin-top: 10px;
  padding: 8px 15px;
