@@ -1,7 +1,5 @@
-// Create a graphology graph
 const graph = new graphology.Graph();
 
-// Instantiate sigma.js and render the graph
 const sigmaInstance = new Sigma(graph, document.getElementById("container"), {
   renderEdgeLabels: true
 });
@@ -30,14 +28,12 @@ document.getElementById('search-button').addEventListener('click', () => {
   sigmaInstance.refresh();
 });
 
-// Collapsible widget functionality
 const collapsibleWidget = document.getElementById('collapsible-widget');
 const widgetList = document.getElementById('widget-list');
 
 collapsibleWidget.addEventListener('click', () => {
   widgetList.classList.toggle('hidden');
   if (!widgetList.classList.contains('hidden')) {
-    // Fetch data and update list when widget is opened
     fetch('http://0.0.0.0:8000/scientific-catalogs/titles')
       .then(response => response.json())
       .then(data => {
@@ -48,9 +44,7 @@ collapsibleWidget.addEventListener('click', () => {
 });
 
 function updateWidgetList(titles) {
-  // Clear existing list items
   widgetList.innerHTML = '';
-  // Add new list items
   titles.forEach(title => {
     const listItem = document.createElement('li');
     listItem.textContent = title;
@@ -59,14 +53,11 @@ function updateWidgetList(titles) {
         .then(response => response.json())
         .then(data => {
           sigmaInstance.setGraph(graph);
-          // Очищаем предыдущий граф
           graph.clear();
-          // Добавляем новые узлы и ребра
           data.forEach(link => {
             if (!graph.hasNode(link.term_from.hash.toString())) {
               graph.addNode(link.term_from.hash.toString(), { 
                 label: link.term_from.title,
-                // Для простоты разместим узлы случайным образом
                 x: Math.random(), 
                 y: Math.random(), 
                 size: 10, 
@@ -84,12 +75,12 @@ function updateWidgetList(titles) {
             }
             graph.addEdge(link.term_from.hash.toString(), link.term_to.hash.toString(), {
               type: 'arrow',
-              size: link.weight, // Используем вес связи для размера ребра
+              size: link.weight,
               color: "purple",
               label: `${link.weight}`
             });
           });
-          sigmaInstance.refresh(); // Обновляем отображение графа
+          sigmaInstance.refresh();
         })
         .catch(error => console.error('Error fetching catalog entry:', error));
     });
@@ -97,7 +88,6 @@ function updateWidgetList(titles) {
   });
 }
 
-// Input form functionality
 const toggleFormButton = document.getElementById('toggle-form-button');
 const inputForm = document.getElementById('input-form');
 
@@ -111,9 +101,9 @@ const fileInput = document.getElementById('file-input');
 
 generateGraphButton.addEventListener('click', async () => {
   const textValue = textInput.value.trim();
-  const file = fileInput.files[0]; // Получаем сам файл, а не только его имя
+  const file = fileInput.files[0];
 
-  if (!textValue || !file) { // Проверяем наличие файла, а не fileInput.value
+  if (!textValue || !file) {
     alert('Введите информацию о семантическом графе полностью');
     return; 
   }
@@ -131,8 +121,6 @@ generateGraphButton.addEventListener('click', async () => {
       const result = await response.json();
       alert('Граф успешно сгенерирован!');
       console.log('Ответ сервера:', result);
-      // Тут можно добавить логику для обновления списка каталогов или отображения нового графа
-      // Например, можно снова вызвать fetch для /scientific-catalogs/titles и обновить widgetList
       fetch('http://0.0.0.0:8000/scientific-catalogs/titles')
         .then(res => res.json())
         .then(data => {
