@@ -2,14 +2,14 @@ import json
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, UploadFile, HTTPException, BackgroundTasks
-from sqlalchemy import select, text, column
+from sqlalchemy import select, text, join, column
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from database import get_session
 from source_extraction.models import TermModel
 from schemas import GraphLink
-from models import ScientificCatalogModel, ScientificCatalogProcessingStatus, SemanticGraphLink
-from background_tasks import generate_graph_task
+from models import ScientificCatalogModel, ScientificCatalogProcessingStatus, TermModel as TermDBModel, SemanticGraphLink
+from background_tasks import generate_graph_task, analyze_article
 
 DBSessionDepends = Annotated[AsyncSession, Depends(get_session)]
 
@@ -93,3 +93,19 @@ async def get_all_scientific_catalog_titles(session: DBSessionDepends):
     }
 
     return response
+
+@router.post("/analyze-text")
+async def analyze_text(catalog_name: str, article_file: UploadFile, session: DBSessionDepends):
+    j = join(TermDBModel, ScientificCatalogModel, TermDBModel.catalog_id == ScientificCatalogModel.id)
+    stmt = select(TermDBModel.title).select_from(j).where(ScientificCatalogModel.title == catalog_name)
+    result = await session.execute(stmt)
+    terms: list[str] | None = result.scalars().fetchall()
+    if terms is None:
+        pass
+
+    article_file_content: bytes = await article_file.read()
+    article_text: str = article_file_content.decode("utf-8")
+    terms_frequency = analyze_article(article_text, terms)
+    terms_frequency.sort(key=lambda term_frequency: term_frequency[1], reverse=True)
+
+    return {"terms_frequency": terms_frequency}

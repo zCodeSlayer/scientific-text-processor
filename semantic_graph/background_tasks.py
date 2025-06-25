@@ -67,3 +67,43 @@ async def insert_graph_into_database(
 
     await session.flush()
     await session.commit()
+
+def analyze_article(article_text: str, raw_terms: list[str]):
+    terms: list[Term] = []
+    text_preparator: TextPreparator = TextPreparator(MyStemLemmatizationStrategy())
+    for raw_term in raw_terms:
+        title_lemmas: list[str] = text_preparator.prepare_lemmas(raw_term)
+        description_lemmas: list[str] = []
+        term: Term = Term(
+            title=raw_term,
+            description="",
+            title_lemmas=title_lemmas,
+            description_lemmas=description_lemmas,
+        )
+        terms.append(term)
+
+    article_text_lemmas: list[str] = text_preparator.prepare_lemmas(article_text)
+    article_term_view: Term = Term(
+        title="",
+        description=article_text,
+        title_lemmas=[],
+        description_lemmas=article_text_lemmas,
+    )
+
+    terms_usages = []
+    for term in terms:
+        term_size: int = len(term.title_lemmas)
+        investigated_description_size: int = len(article_term_view.description_lemmas)
+
+        term_used_count: int = 0
+        for text_position in range(investigated_description_size - term_size + 1):
+            description_slice: list[str] = article_term_view.description_lemmas[
+                text_position: text_position + term_size
+            ]
+            if hash(term) == hash(frozenset(description_slice)):
+                term_used_count += 1
+
+        if term_used_count > 0:
+            terms_usages.append((term.title, term_used_count))
+
+    return terms_usages
