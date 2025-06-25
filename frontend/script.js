@@ -137,3 +137,34 @@ generateGraphButton.addEventListener('click', async () => {
     console.error('Сетевая ошибка или ошибка выполнения запроса:', error);
   }
 }); 
+
+// Логика для нового виджета с select
+const toggleSelectFormButton = document.getElementById('toggle-select-form-button');
+const selectForm = document.getElementById('select-form');
+const dropdownSelect = document.getElementById('dropdown-select');
+
+if (toggleSelectFormButton && selectForm) {
+  toggleSelectFormButton.addEventListener('click', () => {
+    selectForm.classList.toggle('hidden');
+    if (!selectForm.classList.contains('hidden')) {
+      toggleSelectFormButton.classList.add('active');
+      // Загружаем варианты для select
+      fetch('http://0.0.0.0:8000/scientific-catalogs/titles')
+        .then(response => response.json())
+        .then(data => {
+          if (dropdownSelect) {
+            dropdownSelect.innerHTML = '';
+            data.catalogsTitles.forEach(title => {
+              const option = document.createElement('option');
+              option.value = title;
+              option.textContent = title;
+              dropdownSelect.appendChild(option);
+            });
+          }
+        })
+        .catch(error => console.error('Ошибка при загрузке названий каталогов:', error));
+    } else {
+      toggleSelectFormButton.classList.remove('active');
+    }
+  });
+} 

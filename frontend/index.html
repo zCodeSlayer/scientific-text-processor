@@ -29,6 +29,17 @@
                 <button id="generate-graph-button" style="margin-top: 10px;">Сгенерировать семантический граф</button>
             </div>
         </div>
+
+        <!-- Новый виджет с раскрывающимся списком -->
+        <div id="select-widget" class="collapsible-container" style="left: 110px;">
+            <button id="toggle-select-form-button" class="toggle-button widget-control-button">🔍</button>
+            <div id="select-form" class="collapsible-content hidden">
+                <select id="dropdown-select" name="dropdown-select">
+                </select>
+                <input type="file" id="file-input-select" name="file-input-select">
+                <button id="analyze-text-button" style="margin-top: 10px;">Исследовать текст</button>
+            </div>
+        </div>
     </header>
 
     <div id="container"></div>

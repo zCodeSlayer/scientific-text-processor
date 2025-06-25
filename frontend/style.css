@@ -203,4 +203,60 @@ body {
 
 #generate-graph-button:hover {
  background-color: #4CAF50;
+}
+
+#toggle-select-form-button {
+  background-color: orange;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6em;
+  padding: 0;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+  box-shadow: 0 1px 4px rgba(255, 140, 0, 0.10);
+  height: 40px;
+  width: 40px;
+}
+
+#toggle-select-form-button svg {
+  width: 1.5em;
+  height: 1.5em;
+  display: block;
+  margin: 0;
+  padding: 0;
+  vertical-align: middle;
+}
+
+#toggle-select-form-button:active, #toggle-select-form-button.active {
+  transform: scale(0.97);
+}
+
+#dropdown-select,
+#file-input-select,
+#generate-graph-select-button {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
+#generate-graph-select-button {
+  height: 24px;
+  font-size: 1.1em;
+}
+
+#analyze-text-button {
+  width: 100%;
+  box-sizing: border-box;
+  height: 24px;
+  font-size: 1.1em;
+  margin-bottom: 0;
+  background-color: orange;
+  color: #6b3a00;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+#analyze-text-button:hover {
+  background-color: darkorange;
 } 
