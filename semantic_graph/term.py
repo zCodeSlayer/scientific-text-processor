@@ -12,4 +12,6 @@ class Term:
         return hash(self) == hash(other)
 
     def __hash__(self) -> int:
-        return frozenset(self.title_lemmas).__hash__()
+        hashes: list[int] = [hash(lemma) for lemma in self.title_lemmas]
+        hashes.sort()
+        return hash(tuple(hashes))
