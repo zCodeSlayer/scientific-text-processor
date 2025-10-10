@@ -94,7 +94,7 @@ async def get_all_scientific_catalog_titles(session: DBSessionDepends):
 
     return response
 
-@router.post("/analyze-text")
+@router.post("/analyze-text/{catalog_name}")
 async def analyze_text(catalog_name: str, article_file: UploadFile, session: DBSessionDepends):
     j = join(TermDBModel, ScientificCatalogModel, TermDBModel.catalog_id == ScientificCatalogModel.id)
     stmt = select(TermDBModel.title).select_from(j).where(ScientificCatalogModel.title == catalog_name)
@@ -108,4 +108,4 @@ async def analyze_text(catalog_name: str, article_file: UploadFile, session: DBS
     terms_frequency = analyze_article(article_text, terms)
     terms_frequency.sort(key=lambda term_frequency: term_frequency[1], reverse=True)
 
-    return {"terms_frequency": terms_frequency}
+    return {"terms_frequency": terms_frequency[1:]}

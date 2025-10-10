@@ -43,6 +43,19 @@
     </header>
 
     <div id="container"></div>
+    <!-- Всплывающее окно для результатов анализа -->
+    <div id="analyze-modal" class="modal" style="display:none;">
+      <div class="modal-content">
+        <span class="close-modal" id="close-analyze-modal">&times;</span>
+        <h3>Результаты анализа</h3>
+        <table id="analyze-results-table">
+          <thead>
+            <tr><th>Термин</th><th>Частота</th><th>Частота, %</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
     <script src="script.js"></script>
   </body>
 </html>

@@ -168,3 +168,61 @@ if (toggleSelectFormButton && selectForm) {
     }
   });
 } 
+
+const analyzeTextButton = document.getElementById('analyze-text-button');
+const fileInputSelect = document.getElementById('file-input-select');
+
+const analyzeModal = document.getElementById('analyze-modal');
+const closeAnalyzeModal = document.getElementById('close-analyze-modal');
+const analyzeResultsTable = document.getElementById('analyze-results-table').querySelector('tbody');
+
+if (closeAnalyzeModal && analyzeModal) {
+  closeAnalyzeModal.addEventListener('click', () => {
+    analyzeModal.style.display = 'none';
+  });
+}
+
+if (analyzeTextButton && fileInputSelect && dropdownSelect) {
+  analyzeTextButton.addEventListener('click', async () => {
+    const catalogName = dropdownSelect.value;
+    const file = fileInputSelect.files[0];
+    if (!catalogName || !file) {
+      alert('Пожалуйста, выберите каталог и файл для анализа.');
+      return;
+    }
+    const formData = new FormData();
+    formData.append('article_file', file);
+    try {
+      const response = await fetch(`http://0.0.0.0:8000/analyze-text/${encodeURIComponent(catalogName)}`, {
+        method: 'POST',
+        body: formData
+      });
+      if (response.ok) {
+        const result = await response.json();
+        // Показываем модальное окно с результатами
+        if (result.terms_frequency && Array.isArray(result.terms_frequency)) {
+          analyzeResultsTable.innerHTML = '';
+          const total = result.terms_frequency.reduce((sum, [, freq]) => sum + freq, 0) || 1;
+          result.terms_frequency.forEach(([term, freq]) => {
+            const percent = ((freq / total) * 100).toFixed(2);
+            const row = document.createElement('tr');
+            row.innerHTML = `<td>${term}</td><td>${freq}</td><td>${percent}</td>`;
+            analyzeResultsTable.appendChild(row);
+          });
+          analyzeModal.style.display = 'flex';
+        } else {
+          alert('Результат анализа: ' + JSON.stringify(result));
+        }
+      } else {
+        const errorData = await response.json();
+        let errorMsg = errorData.detail;
+        if (!errorMsg) {
+          errorMsg = JSON.stringify(errorData);
+        }
+        alert('Ошибка: ' + errorMsg);
+      }
+    } catch (error) {
+      alert('Ошибка при отправке запроса: ' + error);
+    }
+  });
+} 
